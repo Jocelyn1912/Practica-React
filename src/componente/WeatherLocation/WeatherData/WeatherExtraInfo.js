@@ -10,9 +10,9 @@ const WeatherExtraInfo = () => (
 */
 
 const WeatherExtraInfo = ({humidity, wind}) => (
-  <div>
-    <span>{`${humidity} % -`}</span>
-    <span>{`${wind} wind`}</span>
+  <div classname='weatherExtraInfoCont'>
+    <span classname='weatherExtrainfo'>{`Humedad: ${humidity} % -`}</span>
+    <span classname='weatherExtrainfo'>{`Vientos: ${wind} wind`}</span>
   </div>
 )
 
