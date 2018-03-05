@@ -1,20 +1,24 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import CircularProgress from 'material-ui/CircularProgress';
 import Location from './Location';
 import WeatherData from './WeatherData/index.js';
-import {CLOUD, CLOUDY, SUN, RAIN, SNOW, WINDY} from './../../constant/weathers.js';
+import transformWeather from './../../services/transformWeather.js';
+//import {CLOUD, CLOUDY, SUN, RAIN, SNOW, WINDY} from './../../constant/weathers.js';
 //import'.style.css';
 
 const api_key = '3964db249e6c82ee05522ad1fa60775e';
-const location = 'Buenos Aires,ar';
-const api_weather = `http://api.openweathermap.org/data/2.5/weather?q=${location}&appid=${api_key}&units=metric`;
+// const city = 'Santiago,scl';
+const url = 'http://api.openweathermap.org/data/2.5/weather';
 
+/*
 const data1 = {
   temperature: 32,
   weatherState: SUN,
   humidity: 2,
   wind: '10 m/s',
 }
-/*
+
 const data2 = {
   temperature: 10,
   weatherState: SNOW,
@@ -34,61 +38,64 @@ const WeatherLocation = () => (
 
 class WeatherLocation extends Component {
 
-  constructor () {
+  constructor ({city}) {
+    // Estado inicial
     super();
     this.state = {
-      city: 'Santiago',
-      data: data1
+      city,
+      data: null
     }
+    console.log('Constructor');
   }
 
-  getWeatherState = (weather) => {
-    return SUN;
-  }
+  /*
+  this.setState ({
+    data: data2
+  })
+  */
 
-  getData = (weather_data) => {
-    const { humidity, temp } = weather_data.main;
-    const { speed } = weather_data.wind;
-    const weatherState = this.getWeatherState(this.weather);
-
-    const data = {
-      humidity,
-      temperature: temp,
-      weatherState,
-      wind: `${speed} m/s`,
-    }
-    return data;
-  }
-
-  handleUpdateClick = () => {
-    /*
-    this.setState ({
-      data: data2
-    })
-    */
+  componentWillMount() {
+  // console.log('componentWillMount');
+    const {city} = this.state;
+    const api_weather = `${url}?q=${city}&appid=${api_key}&units=metric`;
     fetch(api_weather).then(data => {
       console.log(data);
       return data.json();
     }).then(weather_data => {
-      const data = this.getData(weather_data);
+      const data = transformWeather(weather_data);
       this.setState({ data });
     })
-    
-
-
-    console.log('Actualizado');
   }
-  render = () => (
-    <div className='weatherLocation'>
-      <Location city = {this.state.city}/>
-      <WeatherData data = {this.state.data}/>
-      <button onClick={this.handleUpdateClick}>Actualizar</button>
-    </div>
-  )
+
+  /*
+  componentDidMount() {
+    console.log('componentDidMount');
+  }
+
+  componentWillUpdate() {
+    console.log('componentWillUpdate');
+  }
+
+  componentDidUpadate() {
+    console.log('componentDidUpadate');
+  }
+  */
+
+  render = () => {
+    console.log('Render');
+    const {city, data} = this.state;
+    return (
+      <div className='weatherLocation'>
+      <Location city = {city}/>
+      { data !== null ? <WeatherData data = {data}/> : <CircularProgress size={60} thickness={7} />
+      }
+      </div>
+    )
+  }
 }
 
-
-
-
+WeatherLocation.propTypes = {
+  city:PropTypes.string,
+}
 
 export default WeatherLocation;
