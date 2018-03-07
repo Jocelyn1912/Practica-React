@@ -4,8 +4,7 @@ import CircularProgress from 'material-ui/CircularProgress';
 import Location from './Location';
 import WeatherData from './WeatherData/index.js';
 import transformWeather from './../../services/transformWeather.js';
-//import {CLOUD, CLOUDY, SUN, RAIN, SNOW, WINDY} from './../../constant/weathers.js';
-//import'.style.css';
+import './style.css';
 
 const api_key = '3964db249e6c82ee05522ad1fa60775e';
 // const city = 'Santiago,scl';
